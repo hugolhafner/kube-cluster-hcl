@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: litmus
+  namespace: litmus
+  annotations:
+    kubernetes.io/ingress.class: argo
+spec:
+  rules:
+  - host: litmus.hugohafner.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: litmusportal-frontend-service
+            port:
+              number: 9091

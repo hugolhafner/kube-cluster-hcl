@@ -1,0 +1,19 @@
+apiVersion : kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: restrict-image-labels
+  namespace: kyverno
+spec:
+  validationFailureAction: enforce
+  rules:
+  - name: validate-labels
+    match:
+      resources:
+        kinds:
+        - Pod
+    validate:
+      message: "Images may not be using the latest tag."
+      pattern:
+        spec:
+          containers:
+          - image: "!*:latest"

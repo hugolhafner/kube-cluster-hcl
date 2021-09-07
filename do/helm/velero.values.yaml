@@ -1,0 +1,28 @@
+initContainers:
+  - name: velero-plugin-for-aws
+    image: velero/velero-plugin-for-aws:v1.2.0
+    imagePullPolicy: IfNotPresent
+    volumeMounts:
+      - mountPath: /target
+        name: plugins
+
+configuration:
+  provider: aws
+
+  backupStorageLocation:
+    bucket: ""
+    config:
+      region: sfo3
+      s3Url: https://sfo3.digitaloceanspaces.com
+
+credentials:
+  name: velero
+
+snapshotsEnabled: false
+
+schedules:
+  hourly-backup:
+    disabled: false
+    schedule: "0 * * * *"
+    template:
+      ttl: "168h"

@@ -1,0 +1,7 @@
+extraArgs:
+  - --enable-insecure-login
+
+protocolHttp: true
+
+service:
+  externalPort: 80

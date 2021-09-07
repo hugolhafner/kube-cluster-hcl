@@ -1,0 +1,33 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: check-root-user
+  namespace: kyvern
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: check-root-user
+    exclude:
+      resources:
+        namespaces:
+        - kube-system
+    match:
+      resources:
+        kinds:
+        - Pod
+    validate:
+      message: "Root user is not allowed. Set runAsNonRoot to true."
+      anyPattern:
+      # Checks for `runAsNonRoot` on the Pod.
+      - spec:
+          securityContext:
+            runAsNonRoot: true
+      # Checks for `runAsNonRoot` on every container.
+      - spec:
+          containers:
+          # The `name` field here is not specifically required but rather used
+          # as a visual aid for instructional purposes.
+          - name: "*"
+            securityContext:
+              runAsNonRoot: true

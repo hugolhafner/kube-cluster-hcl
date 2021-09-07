@@ -1,0 +1,16 @@
+chaoskube:
+  args:
+    interval: "10m"
+    kinds: "!DaemonSet"
+    namespaces: "!kube-system"
+    excluded-times-of-day: "18:00-09:00,14:15-16:00"
+    timezone: "Europe/London"
+    no-dry-run: ""
+    
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 10m
+    memory: 16Mi

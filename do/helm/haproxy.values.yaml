@@ -1,0 +1,18 @@
+controller:
+  ingressClass: argo
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 11
+    targetCPUUtilizationPercentage: 50
+
+  service:
+    type: ClusterIP
+
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi

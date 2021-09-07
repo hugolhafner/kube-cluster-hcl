@@ -1,0 +1,65 @@
+datadog:
+  logLevel: warn
+  kubeStateMetricsEnabled: true
+
+  nodeLabelsAsTags:
+    cloud.google.com/gke-nodepool: node_pool
+    beta.kubernetes.io/instance-type: gke-instance-type
+    
+  podLabelsAsTags:
+    app.kubernetes.io/name: app
+    app.kubernetes.io/instance: helm_release
+  
+  logs:
+    enabled: true
+    containerCollectAll: true
+
+  apm:
+    socketEnabled: false
+    portEnabled: true
+
+  networkMonitoring:
+    enabled: true
+
+  securityAgent:
+    compliance:
+      enabled: true
+    runtime:
+      enabled: true
+      syscallMonitor:
+        enabled: true
+
+  networkPolicy:
+    create: true
+
+clusterAgent:
+  replicas: 3
+
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
+
+  admissionController:
+    enabled: true
+    mutateUnlabelled: true
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+  priorityClassName: cluster-monitor
+  createPodDisruptionBudget: true
+
+agents:
+  priorityClassName: cluster-monitor
+  
+  podAnnotations:
+    sidecar.istio.io/inject: "false"
+
+clusterChecksRunner:
+  enabled: true
+  createPodDisruptionBudget: true
+  priorityClassName: cluster-monitor
