@@ -1,0 +1,83 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: block-updates-deletes
+  annotations:
+    policies.kyverno.io/title: Block Updates and Deletes
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/subject: RBAC
+    policies.kyverno.io/description: >-
+      Kubernetes RBAC allows for controls on kinds of resources or those
+      with specific names. But it does not have the type of granularity often
+      required in more complex environments. This policy restricts updates and deletes to any
+      resources in a namespace that contain the label `protected=true` unless by
+      a cluster-admin.      
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: block-object-updates-deletes
+    match:
+      resources:
+        kinds:
+          - Pod
+          - DaemonSet
+          - Deployment
+          - Job
+          - StatefulSet
+          - CronJob
+          - NetworkPolicy
+          - ConfigMap
+          - Secrets
+          - Ingress
+          - PersistentVolumeClaim
+          - PersistentVolume
+          - Service
+          - ServiceAccount
+          - HorizontalPodAutoscaler
+          - VerticalPodAutoscaler
+          - PodDisruptionBudget
+    context:
+      - name: protected
+        apiCall:
+          urlPath: "/api/v1/namespaces/{{ request.object.metadata.namespace }}"
+          jmesPath: "metadata.labels.protected"
+    preconditions:
+      all:
+        - key: "{{protected}}"
+          operator: Equals
+          value: "true"
+    exclude:
+      clusterRoles:
+      - cluster-admin
+    validate:
+      message: "This resource is protected and changes are not allowed. Please seek a cluster-admin."
+      deny:
+        conditions:
+          - key: "{{request.operation}}"
+            operator: In
+            value: 
+            - DELETE
+            - UPDATE
+  - name: block-namespace-updates-deletes
+    match:
+      resources:
+        kinds:
+          - Namespace
+    preconditions:
+      all:
+        - key: "{{request.object.metadata.labels.protected}}"
+          operator: Equals
+          value: "true"
+    exclude:
+      clusterRoles:
+      - cluster-admin
+    validate:
+      message: "This resource is protected and changes are not allowed. Please seek a cluster-admin."
+      deny:
+        conditions:
+          - key: "{{request.operation}}"
+            operator: In
+            value: 
+            - DELETE
+            - UPDATE

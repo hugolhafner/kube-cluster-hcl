@@ -1,0 +1,131 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: ns-priority-class-management
+  annotations:
+    pod-policies.kyverno.io/autogen-controllers: DaemonSet,Deployment,Job,StatefulSet,CronJob
+    policies.kyverno.io/title: Add default priority class to pods and controllers depending on the namespace environment
+    policies.kyverno.io/category: Multi-Tenancy
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Kubernetes Namespaces labelled with environment=X are given a respective priority class.
+      Labels can include, development, staging, canary, production, monitor.
+spec:
+  validationFailureAction: audit
+  rules:
+    - name: add-pod-development-priority-class
+      context:
+        - name: environment
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{ request.object.metadata.namespace }}"
+            jmesPath: "metadata.labels.environment"
+      match:
+        resources:
+          kinds:
+          - Pod
+      preconditions:
+        all:
+          - key: "{{ environment }}"
+            operator: Equals
+            value: "development"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            priorityClassName: "development-priority-class"
+    - name: add-pod-staging-priority-class
+      context:
+        - name: environment
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{ request.object.metadata.namespace }}"
+            jmesPath: "metadata.labels.environment"
+      match:
+        resources:
+          kinds:
+          - Pod
+      preconditions:
+        all:
+          - key: "{{ environment }}"
+            operator: Equals
+            value: "staging"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            priorityClassName: "staging-priority-class"
+    - name: add-pod-canary-priority-class
+      context:
+        - name: environment
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{ request.object.metadata.namespace }}"
+            jmesPath: "metadata.labels.environment"
+      match:
+        resources:
+          kinds:
+          - Pod
+      preconditions:
+        all:
+          - key: "{{ environment }}"
+            operator: Equals
+            value: "canary"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            priorityClassName: "canary-priority-class"
+    - name: add-pod-production-priority-class
+      context:
+        - name: environment
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{ request.object.metadata.namespace }}"
+            jmesPath: "metadata.labels.environment"
+      match:
+        resources:
+          kinds:
+          - Pod
+      preconditions:
+        all:
+          - key: "{{ environment }}"
+            operator: Equals
+            value: "production"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            priorityClassName: "production-priority-class"
+    - name: add-pod-monitor-priority-class
+      context:
+        - name: environment
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{ request.object.metadata.namespace }}"
+            jmesPath: "metadata.labels.environment"
+      match:
+        resources:
+          kinds:
+          - Pod
+      preconditions:
+        all:
+          - key: "{{ environment }}"
+            operator: Equals
+            value: "monitor"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            priorityClassName: "monitor-priority-class"
+    - name: add-pod-cluster-priority-class
+      context:
+        - name: environment
+          apiCall:
+            urlPath: "/api/v1/namespaces/{{ request.object.metadata.namespace }}"
+            jmesPath: "metadata.labels.environment"
+      match:
+        resources:
+          kinds:
+          - Pod
+      preconditions:
+        all:
+          - key: "{{ environment }}"
+            operator: Equals
+            value: "system"
+      mutate:
+        patchStrategicMerge:
+          spec:
+            priorityClassName: "cluster-priority-class"
+      
