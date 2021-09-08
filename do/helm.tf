@@ -203,17 +203,6 @@ resource "helm_release" "kyverno" {
   ]
 }
 
-resource "helm_release" "kube-state-metrics" {
-  count = var.datadog.enabled ? 0 : 1
-
-  name       = "kube-state-metrics"
-
-  repository = "https://charts.helm.sh/stable"
-  chart      = "kube-state-metrics"
-
-  namespace = "kube-system"
-}
-
 resource "helm_release" "datadog" {
   count = var.datadog.enabled ? 1 : 0
 
