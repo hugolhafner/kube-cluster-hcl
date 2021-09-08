@@ -1,0 +1,20 @@
+controller:
+  replicaCount: 3
+
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 11
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+
+  ingressClassResource:
+    name: nginx-production
+
+  resources:
+    limits:
+      cpu: 300m
+      memory: 256Mi
+    requests:
+      cpu: 200m
+      memory: 128Mi

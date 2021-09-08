@@ -5,6 +5,11 @@ controller:
     enabled: true
     minReplicas: 3
     maxReplicas: 5
+    targetCPUUtilizationPercentage: 70
+    targetMemoryUtilizationPercentage: 70
+
+  ingressClassResource:
+    name: nginx-staging
 
   resources:
     limits:

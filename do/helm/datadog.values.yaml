@@ -50,11 +50,11 @@ clusterAgent:
       cpu: 200m
       memory: 256Mi
 
-  priorityClassName: cluster-monitor
+  priorityClassName: monitor-priority-class
   createPodDisruptionBudget: true
 
 agents:
-  priorityClassName: cluster-monitor
+  priorityClassName: monitor-priority-class
   
   podAnnotations:
     sidecar.istio.io/inject: "false"
@@ -62,4 +62,4 @@ agents:
 clusterChecksRunner:
   enabled: true
   createPodDisruptionBudget: true
-  priorityClassName: cluster-monitor
+  priorityClassName: monitor-priority-class

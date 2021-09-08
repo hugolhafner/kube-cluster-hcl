@@ -1,6 +1,8 @@
+replicaCount: 3
+
 chaoskube:
   args:
-    interval: "10m"
+    interval: "15m"
     kinds: "!DaemonSet"
     namespaces: "!kube-system"
     excluded-times-of-day: "18:00-09:00,14:15-16:00"

@@ -14,7 +14,7 @@ resource "helm_release" "velero" {
   chart      = "velero"
 
   namespace = "velero"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.velero]
 
   set {
     name = "credentials.secretContents.cloud"
@@ -44,7 +44,7 @@ resource "helm_release" "kruise" {
   chart      = "https://github.com/openkruise/kruise/releases/download/v0.9.0/kruise-chart.tgz"
 
   namespace = "kruise"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.kruise]
 }
 
 resource "helm_release" "chaoskube" {
@@ -54,7 +54,7 @@ resource "helm_release" "chaoskube" {
   chart      = "chaoskube"
 
   namespace = "chaoskube"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.chaoskube]
 
   set {
     name = "image.tag"
@@ -69,27 +69,41 @@ resource "helm_release" "chaoskube" {
   values = ["${file("helm/chaoskube.values.yaml")}"]
 }
 
-resource "helm_release" "litmus" {
-  name       = "litmus"
-
-  repository = "https://litmuschaos.github.io/litmus-helm/"
-  chart      = "litmus"
-
-  namespace = "litmus"
-  create_namespace = true
-}
-
 // TODO: Istio configuration for ingress and communication within service mesh
-resource "helm_release" "nginx" {
-  name       = "nginx"
+resource "helm_release" "nginx-staging" {
+  name       = "nginx-staging"
 
   repository = "https://kubernetes.github.io/ingress-nginx"
   chart      = "ingress-nginx"
 
-  namespace = "nginx"
-  create_namespace = true
+  namespace = "nginx-staging"
+  depends_on = [kubernetes_namespace.nginx-staging]
 
-  values = ["${file("helm/nginx.values.yaml")}"]
+  values = ["${file("helm/nginx.staging.values.yaml")}"]
+}
+
+resource "helm_release" "nginx-canary" {
+  name       = "nginx-canary"
+
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+
+  namespace = "nginx-canary"
+  depends_on = [kubernetes_namespace.nginx-canary]
+
+  values = ["${file("helm/nginx.canary.values.yaml")}"]
+}
+
+resource "helm_release" "nginx-production" {
+  name       = "nginx-production"
+
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
+
+  namespace = "nginx-production"
+  depends_on = [kubernetes_namespace.nginx-production]
+
+  values = ["${file("helm/nginx.production.values.yaml")}"]
 }
 
 resource "helm_release" "cert-manager" {
@@ -99,7 +113,7 @@ resource "helm_release" "cert-manager" {
   chart      = "cert-manager"
 
   namespace = "cert-manager"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.cert-manager]
 
   set {
     name = "installCRDs"
@@ -122,8 +136,8 @@ resource "helm_release" "kubefledged" {
   repository = "https://senthilrch.github.io/kubefledged-charts/"
   chart      = "kube-fledged"
 
-  create_namespace = true
   namespace = "kube-fledged"
+  depends_on = [kubernetes_namespace.kube-fledged]
 }
 
 resource "helm_release" "kubernetes-dashboard" {
@@ -132,8 +146,8 @@ resource "helm_release" "kubernetes-dashboard" {
   repository = "https://kubernetes.github.io/dashboard/"
   chart      = "kubernetes-dashboard"
 
-  create_namespace = true
   namespace = "kubernetes-dashboard"
+  depends_on = [kubernetes_namespace.kubernetes-dashboard]
 
   values = ["${file("helm/kubernetes-dashboard.values.yaml")}"]
 }
@@ -145,7 +159,7 @@ resource "helm_release" "vpa" {
   chart      = "vpa"
 
   namespace = "vpa"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.vpa]
 }
 
 resource "helm_release" "goldilocks" {
@@ -155,7 +169,7 @@ resource "helm_release" "goldilocks" {
   chart      = "goldilocks"
 
   namespace = "goldilocks"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.goldilocks]
 }
 
 resource "helm_release" "metrics-server" {
@@ -176,7 +190,7 @@ resource "helm_release" "rbac-manager" {
   chart      = "rbac-manager"
 
   namespace = "rbac-manager"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.rbac-manager]
 }
 
 resource "helm_release" "kyverno-crds" {
@@ -186,7 +200,7 @@ resource "helm_release" "kyverno-crds" {
   chart      = "kyverno-crds"
 
   namespace = "kyverno"
-  create_namespace = true
+  depends_on = [kubernetes_namespace.kyverno]
 }
 
 resource "helm_release" "kyverno" {
@@ -196,11 +210,7 @@ resource "helm_release" "kyverno" {
   chart      = "kyverno"
 
   namespace = "kyverno"
-  create_namespace = true
-
-  depends_on = [
-    helm_release.kyverno-crds
-  ]
+  depends_on = [kubernetes_namespace.kyverno, helm_release.kyverno-crds]
 }
 
 resource "helm_release" "datadog" {
@@ -226,7 +236,7 @@ resource "helm_release" "datadog" {
   namespace = "datadog"
 
   depends_on = [
-    kubernetes_priority_class.cluster-monitor,
+    kubernetes_priority_class.monitor-priority-class,
     kubernetes_namespace.datadog
   ]
 }

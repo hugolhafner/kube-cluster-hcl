@@ -3,7 +3,7 @@ kind: ImageCache
 metadata:
   # Name of the image cache. A cluster can have multiple image cache objects
   name: nginx
-  namespace: nginx
+  namespace: nginx-production
   labels:
     app: kubefledged
     component: imagecache

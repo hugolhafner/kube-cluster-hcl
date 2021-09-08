@@ -34,25 +34,78 @@ resource "kubernetes_priority_class" "default-priority-class" {
   description = "Default priority class for all pods"
 }
 
-resource "kubernetes_priority_class" "cluster-monitor" {
+resource "kubernetes_priority_class" "development-priority-class" {
   metadata {
-    name = "cluster-monitor"
+    name = "development-priority-class"
   }
 
   value = 2000
   global_default = false
+  description = "Development Priority class to ensure preferred scheduling on nodes over default environments."
+}
+
+resource "kubernetes_priority_class" "staging-priority-class" {
+  metadata {
+    name = "staging-priority-class"
+  }
+
+  value = 3000
+  global_default = false
+  description = "Staging Priority class to ensure preferred scheduling on nodes over development and default environments."
+}
+
+resource "kubernetes_priority_class" "canary-priority-class" {
+  metadata {
+    name = "canary-priority-class"
+  }
+
+  value = 4000
+  global_default = false
+  description = "Canary Priority class to ensure preferred scheduling on nodes over development and default environments."
+}
+
+resource "kubernetes_priority_class" "production-priority-class" {
+  metadata {
+    name = "production-priority-class"
+  }
+
+  value = 4000
+  global_default = false
+  description = "Production Priority class to ensure preferred scheduling on nodes over development and default environments."
+}
+
+resource "kubernetes_priority_class" "monitor-priority-class" {
+  metadata {
+    name = "monitor-priority-class"
+  }
+
+  value = 5000
+  global_default = false
   description = "Monitoring Priority class to ensure scheduling on nodes."
 }
 
-// Custom namespace for datadog to allow for golidlocks annotation
-resource "kubernetes_namespace" "datadog" {
-  count = var.datadog.enabled ? 1 : 0
-
+resource "kubernetes_priority_class" "cluster-priority-class" {
   metadata {
-    labels = {
-      "goldilocks.fairwinds.com/enabled" = true
-    }
+    name = "cluster-priority-class"
+  }
 
-    name = "datadog"
+  value = 10000
+  global_default = false
+  description = "Cluster Priority class to ensure scheduling on nodes."
+}
+
+resource "kubernetes_config_map" "allowed-priority-classes" {
+  metadata {
+    name = "allowed-priority-classes"
+    namespace = "default"
+  }
+
+  data = {
+    "development-priority-class" = "true"
+     "staging-priority-class" = "true"
+     "canary-priority-class" = "true"
+     "production-priority-class" = "true"
+     "monitor-priority-class" = "true"
+     "cluster-priority-class" = "true"
   }
 }
