@@ -1,7 +1,11 @@
+data "digitalocean_kubernetes_versions" "latest" {
+  version_prefix = "1.21."
+}
+
 resource "digitalocean_kubernetes_cluster" "cluster" {
   name    = "${var.cluster_region}-${random_id.random.hex}"
   region  = var.cluster_region
-  version = "1.21.2-do.2"
+  version = data.digitalocean_kubernetes_versions.latest.latest_version
 
   node_pool {
     name       = var.node_pool.name
