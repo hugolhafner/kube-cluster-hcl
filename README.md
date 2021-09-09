@@ -17,6 +17,10 @@
 - [Cloudflare Argo](https://www.cloudflare.com/en-gb/products/argo-smart-routing/) (Cloudflare Argo tunneling system to ensure connections to internal applications protected by cloudflare access actually come via the cloudflare network to ensure security)
 - [ArgoCD](https://argoproj.github.io/) (CI/CD Platform for Kubernetes applications)
 
+### Resources
+- Example Resources for a 5 node cluster with machine type "s-8vcpu-16gb" on DigitalOcean
+- Note resource limits and requests are based on rough estimates and are likely to need tweaking under load
+![DigitalOcean Resource Usage](https://raw.githubusercontent.com/hugolhafner/kube-cluster-hcl/main/images/resources.png)
 
 ### External Services:
 - [Nginx](https://nginx.org) (Externally Facing Ingress for Management of Public Services)
