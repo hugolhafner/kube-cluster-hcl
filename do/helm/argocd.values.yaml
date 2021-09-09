@@ -1,0 +1,65 @@
+controller:
+  replicas: 3
+
+  enableStatefulSet: true
+
+  env:
+    - name: "ARGOCD_CONTROLLER_REPLICAS"
+      value: "3"
+
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+server:
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
+  
+  resources:
+    limits:
+      cpu: 100m
+      memory: 105Mi
+    requests:
+      cpu: 50m
+      memory: 105Mi
+
+  extraArgs:
+   - --insecure
+
+  ingress:
+    enabled: true
+    ingressClassName: "nginx-argo"
+    hosts:
+      - "argo-cd.hugohafner.com"
+
+redis:
+  resources:
+    limits:
+      cpu: 75m
+      memory: 128Mi
+    requests:
+      cpu: 75m
+      memory: 128Mi
+
+repoServer:
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 5
+
+  resources:
+    limits:
+      cpu: 50m
+      memory: 105Mi
+    requests:
+      cpu: 50m
+      memory: 105Mi
+
+dex:
+  enabled: false

@@ -9,19 +9,18 @@ controller:
     targetMemoryUtilizationPercentage: 70
 
   ingressClassResource:
-    name: nginx-canary
+    name: nginx-argo
 
-  # service:
-    # annotations: {}
-      # "service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https": "true"
+  service:
+    type: ClusterIP
 
   resources:
     limits:
-      cpu: 300m
-      memory: 256Mi
-    requests:
-      cpu: 300m
+      cpu: 50m
       memory: 128Mi
-  
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
   labels:
     distribute: "true"

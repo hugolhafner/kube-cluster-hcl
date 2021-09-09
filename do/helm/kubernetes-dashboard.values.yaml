@@ -1,3 +1,5 @@
+replicaCount: 3
+
 extraArgs:
   - --enable-insecure-login
 
@@ -5,3 +7,11 @@ protocolHttp: true
 
 service:
   externalPort: 80
+
+resources:
+  requests:
+    cpu: 300m
+    memory: 128Mi
+  limits:
+    cpu: 300m
+    memory: 128Mi

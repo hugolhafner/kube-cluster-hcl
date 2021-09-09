@@ -3,3 +3,4 @@
 .tfvars*
 argo-creds.json
 gcp
+datadog

@@ -1,13 +1,16 @@
-resource "helm_release" "argo-haproxy" {
-  name       = "argo-haproxy"
+resource "helm_release" "nginx-argo" {
+  name       = "nginx-argo"
 
-  repository = "https://haproxy-ingress.github.io/charts"
-  chart      = "haproxy-ingress"
+  repository = "https://kubernetes.github.io/ingress-nginx"
+  chart      = "ingress-nginx"
 
-  values = ["${file("helm/haproxy.values.yaml")}"]
+  values = ["${file("helm/nginx.argo.values.yaml")}"]
 
   namespace = "argo"
-  create_namespace = true
+
+  depends_on = [
+    kubernetes_namespace.argo
+  ]
 }
 
 resource "kubernetes_secret" "tunnel-credentials" {
@@ -21,6 +24,6 @@ resource "kubernetes_secret" "tunnel-credentials" {
   }
 
   depends_on = [
-    helm_release.argo-haproxy
+    kubernetes_namespace.argo
   ]
 }

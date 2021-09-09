@@ -3,9 +3,8 @@ kind: Ingress
 metadata:
   name: kubernetes-dashboard
   namespace: kubernetes-dashboard
-  annotations:
-    kubernetes.io/ingress.class: argo
 spec:
+  ingressClassName: nginx-argo
   rules:
   - host: kubernetes.hugohafner.com
     http:

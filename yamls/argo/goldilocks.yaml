@@ -3,9 +3,8 @@ kind: Ingress
 metadata:
   name: goldilocks
   namespace: goldilocks
-  annotations:
-    kubernetes.io/ingress.class: argo
 spec:
+  ingressClassName: nginx-argo
   rules:
   - host: goldilocks.hugohafner.com
     http:

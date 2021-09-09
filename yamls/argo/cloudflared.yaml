@@ -27,19 +27,22 @@ spec:
         - run
         resources:
           limits:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 50m
+            memory: 105Mi
           requests:
-            cpu: 100m
-            memory: 128Mi
+            cpu: 50m
+            memory: 105Mi
         livenessProbe:
           httpGet:
-            # Cloudflared has a /ready endpoint which returns 200 if and only if
-            # it has an active connection to the edge.
+            path: /healthcheck
+            port: 2000
+          failureThreshold: 1
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
             path: /ready
             port: 2000
           failureThreshold: 1
-          initialDelaySeconds: 10
           periodSeconds: 10
         volumeMounts:
         - name: config
@@ -99,6 +102,6 @@ data:
     ingress:
     # The first rule proxies traffic to the nginx argo ingress manager
     - hostname: "*.hugohafner.com"
-      service: http://argo-haproxy-haproxy-ingress:80
+      service: http://nginx-argo-ingress-nginx-controller:80
     # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
     - service: http_status:404

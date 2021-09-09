@@ -13,8 +13,9 @@
 ### Internal Application Services (Access Management done via [Cloudflare Access](https://www.cloudflare.com/en-gb/teams/access/) to prevent having to use VPN system):
 - [Kubernetes Dashboard](https://github.com/kubernetes/dashboard) (Easy to use hosted Kubernetes Dashboard for visibility and quick management of resources)
 - [VPA & Goldilocks](https://github.com/FairwindsOps/goldilocks) (Scaling Recommendation Dashboard providing insights into recommended request and limit requests for application deployments)
-- [HAProxy Ingress](http://www.haproxy.org) (Ingress Manager for Cloudflare Access domains to allow for easier management via Ingress objects as opposed to configmaps)
+- [Nginx Ingress](http://nginx.org) (Ingress Manager for Cloudflare Access domains to allow for easier management via Ingress objects as opposed to configmaps)
 - [Cloudflare Argo](https://www.cloudflare.com/en-gb/products/argo-smart-routing/) (Cloudflare Argo tunneling system to ensure connections to internal applications protected by cloudflare access actually come via the cloudflare network to ensure security)
+- [ArgoCD](https://argoproj.github.io/) (CI/CD Platform for Kubernetes applications)
 
 
 ### External Services:

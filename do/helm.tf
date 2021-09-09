@@ -130,10 +130,7 @@ resource "helm_release" "cert-manager" {
   namespace = "cert-manager"
   depends_on = [kubernetes_namespace.cert-manager]
 
-  set {
-    name = "installCRDs"
-    value = "true"
-  }
+  values = ["${file("helm/cert-manager.values.yaml")}"]
 }
 
 resource "helm_release" "descheduler" {
@@ -173,6 +170,8 @@ resource "helm_release" "vpa" {
   repository = "https://charts.fairwinds.com/stable"
   chart      = "vpa"
 
+  values = ["${file("helm/vpa.values.yaml")}"]
+
   namespace = "vpa"
   depends_on = [kubernetes_namespace.vpa]
 }
@@ -204,6 +203,8 @@ resource "helm_release" "rbac-manager" {
   repository = "https://charts.fairwinds.com/stable"
   chart      = "rbac-manager"
 
+  values = ["${file("helm/rbac-manager.values.yaml")}"]
+
   namespace = "rbac-manager"
   depends_on = [kubernetes_namespace.rbac-manager]
 }
@@ -224,8 +225,34 @@ resource "helm_release" "kyverno" {
   repository = "https://kyverno.github.io/kyverno/"
   chart      = "kyverno"
 
+  values = ["${file("helm/kyverno.values.yaml")}"]
+
   namespace = "kyverno"
   depends_on = [kubernetes_namespace.kyverno, helm_release.kyverno-crds]
+}
+
+resource "helm_release" "argocd" {
+  name       = "argocd"
+
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-cd"
+
+  values = ["${file("helm/argocd.values.yaml")}"]
+
+  namespace = "argocd"
+  depends_on = [kubernetes_namespace.argocd]
+}
+
+resource "helm_release" "argo-rollouts" {
+  name       = "argo-rollouts"
+
+  repository = "https://argoproj.github.io/argo-helm"
+  chart      = "argo-rollouts"
+
+  values = ["${file("helm/argocd-rollouts.values.yaml")}"]
+
+  namespace = "argocd"
+  depends_on = [kubernetes_namespace.argocd, helm_release.argocd]
 }
 
 resource "helm_release" "datadog" {

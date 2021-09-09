@@ -1,0 +1,10 @@
+controllerReplicaCount: 3
+webhookServerReplicaCount: 3
+
+resources:
+  requests:
+    cpu: 30m
+    memory: 105Mi
+  limits:
+    cpu: 30m
+    memory: 105Mi

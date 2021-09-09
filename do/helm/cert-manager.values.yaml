@@ -1,0 +1,39 @@
+replicaCount: 3
+installCRDs: "true"
+
+serviceAccount:
+  automountServiceAccountToken: false
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 105Mi
+  limits:
+    cpu: 20m
+    memory: 105Mi
+
+webhook:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 20m
+      memory: 105Mi
+    limits:
+      cpu: 20m
+      memory: 105Mi
+
+  serviceAccount:
+    automountServiceAccountToken: false
+
+cainjector:
+  replicaCount: 3
+  resources:
+    requests:
+      cpu: 100m
+      memory: 205Mi
+    limits:
+      cpu: 100m
+      memory: 205Mi
+  
+  serviceAccount:
+    automountServiceAccountToken: false

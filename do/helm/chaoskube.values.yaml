@@ -11,8 +11,8 @@ chaoskube:
     
 resources:
   limits:
-    cpu: 100m
-    memory: 128Mi
+    cpu: 30m
+    memory: 48Mi
   requests:
-    cpu: 10m
-    memory: 16Mi
+    cpu: 30m
+    memory: 48Mi

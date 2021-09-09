@@ -17,9 +17,23 @@ resource "kubernetes_namespace" "kruise" {
       "exec" = false
       "protected" = true
       "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "kruise"
+  }
+}
+
+resource "kubernetes_namespace" "argo" {
+  metadata {
+    labels = {
+      "exec" = false
+      "protected" = true
+      "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
+    }
+
+    name = "argo"
   }
 }
 
@@ -29,6 +43,7 @@ resource "kubernetes_namespace" "chaoskube" {
       "exec" = false
       "protected" = true
       "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "chaoskube"
@@ -83,6 +98,7 @@ resource "kubernetes_namespace" "cert-manager" {
       "exec" = false
       "protected" = true
       "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "cert-manager"
@@ -95,6 +111,7 @@ resource "kubernetes_namespace" "kube-fledged" {
       "exec" = false
       "protected" = true
       "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "kube-fledged"
@@ -120,6 +137,7 @@ resource "kubernetes_namespace" "vpa" {
       "exec" = false
       "protected" = true
       "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "vpa"
@@ -132,6 +150,7 @@ resource "kubernetes_namespace" "goldilocks" {
       "exec" = false
       "protected" = true
       "environment" = "monitor"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "goldilocks"
@@ -144,6 +163,7 @@ resource "kubernetes_namespace" "rbac-manager" {
       "exec" = false
       "protected" = true
       "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "rbac-manager"
@@ -156,9 +176,23 @@ resource "kubernetes_namespace" "kyverno" {
       "exec" = false
       "protected" = true
       "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
     }
 
     name = "kyverno"
+  }
+}
+
+resource "kubernetes_namespace" "argocd" {
+  metadata {
+    labels = {
+      "exec" = false
+      "protected" = true
+      "environment" = "system"
+      "goldilocks.fairwinds.com/enabled" = true
+    }
+
+    name = "argocd"
   }
 }
 

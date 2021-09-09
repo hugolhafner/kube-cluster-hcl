@@ -24,6 +24,5 @@ spec:
     validate:
       message: "Unknown ingress class."
       pattern:
-        metadata:
-          annotations:
-            kubernetes.io/ingress.class: "nginx-staging | nginx-canary | nginx-production | argo"
+        spec:
+          ingressClassName: "nginx-staging | nginx-canary | nginx-production | nginx-argo"
