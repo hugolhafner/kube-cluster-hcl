@@ -80,6 +80,11 @@ resource "helm_release" "nginx-staging" {
   depends_on = [kubernetes_namespace.nginx-staging]
 
   values = ["${file("helm/nginx.staging.values.yaml")}"]
+
+  set {
+    name = "controller.service.annotations.service.beta.kubernetes.io/do-loadbalancer-name"
+    value = "nginx-${digitalocean_kubernetes_cluster.cluster.name}-staging-lb"
+  }
 }
 
 resource "helm_release" "nginx-canary" {
@@ -92,6 +97,11 @@ resource "helm_release" "nginx-canary" {
   depends_on = [kubernetes_namespace.nginx-canary]
 
   values = ["${file("helm/nginx.canary.values.yaml")}"]
+
+  set {
+    name = "controller.service.annotations.service.beta.kubernetes.io/do-loadbalancer-name"
+    value = "nginx-${digitalocean_kubernetes_cluster.cluster.name}-canary-lb"
+  }
 }
 
 resource "helm_release" "nginx-production" {
@@ -104,6 +114,11 @@ resource "helm_release" "nginx-production" {
   depends_on = [kubernetes_namespace.nginx-production]
 
   values = ["${file("helm/nginx.production.values.yaml")}"]
+
+  set {
+    name = "controller.service.annotations.service.beta.kubernetes.io/do-loadbalancer-name"
+    value = "nginx-${digitalocean_kubernetes_cluster.cluster.name}-production-lb"
+  }
 }
 
 resource "helm_release" "cert-manager" {

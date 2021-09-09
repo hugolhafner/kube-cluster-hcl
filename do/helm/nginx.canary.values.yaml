@@ -8,6 +8,10 @@ controller:
     targetCPUUtilizationPercentage: 70
     targetMemoryUtilizationPercentage: 70
 
+  service:
+    annotations:
+      "service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https": "true"
+
   ingressClassResource:
     name: nginx-canary
 

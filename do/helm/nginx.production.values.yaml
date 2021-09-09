@@ -11,6 +11,10 @@ controller:
   ingressClassResource:
     name: nginx-production
 
+  service:
+    annotations:
+      "service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https": "true"
+
   resources:
     limits:
       cpu: 300m
